@@ -1,0 +1,71 @@
+@import "tailwindcss";
+
+@theme {
+  --color-cream: #faf8f4;
+  --color-blush: #f0e0d6;
+  --color-rose: #c4876a;
+  --color-rose-dark: #a06a50;
+  --color-sage: #8fa89a;
+  --color-sage-light: #d4e0d8;
+  --color-charcoal: #2c2825;
+  --color-muted: #8a847d;
+  --color-gold: #c9a96e;
+  --color-gold-light: #e8d5b0;
+  --color-border: #ede8e0;
+
+  --font-display: 'Cormorant Garamond', serif;
+  --font-body: 'Jost', sans-serif;
+
+  --animate-fade-up-1: fadeUp 0.55s ease both;
+  --animate-fade-up-2: fadeUp 0.55s 0.1s ease both;
+  --animate-fade-up-3: fadeUp 0.55s 0.18s ease both;
+  --animate-fade-up-4: fadeUp 0.55s 0.26s ease both;
+  --animate-fade-up-5: fadeUp 0.55s 0.34s ease both;
+  --animate-shimmer: shimmer 1.4s infinite;
+  --animate-bounce-dot: bounceDot 1.2s infinite;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+
+@keyframes bounceDot {
+  0%, 80%, 100% { transform: translateY(0); }
+  40%           { transform: translateY(-6px); }
+}
+
+/* Base */
+/* * { box-sizing: border-box; margin: 0; padding: 0; } */
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-cream);
+  color: var(--color-charcoal);
+  font-weight: 300;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--color-cream); }
+::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 3px; }
+
+/* Shimmer utility — needs gradient, can't be pure Tailwind */
+.shimmer {
+  background: linear-gradient(90deg, #e8d5b0 25%, #c9a96e 50%, #e8d5b0 75%);
+  background-size: 200% 100%;
+  animation: var(--animate-shimmer);
+}
+
+/* Gallery hover — child selector, stays in CSS */
+.g-item { transition: transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94); cursor: pointer; }
+.g-item:hover { transform: scale(1.025); }
+.g-item:hover .g-overlay { opacity: 1 !important; }
+.g-item img { transition: transform 0.4s ease; display: block; width: 100%; height: 100%; object-fit: cover; }

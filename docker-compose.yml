@@ -1,0 +1,42 @@
+version: "3.9"
+
+services:
+  app:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=mysql://wedding:${DB_PASSWORD}@db:3306/wedding_photos
+      - NEXT_PUBLIC_COUPLE_NAMES=${COUPLE_NAMES:-Sarah & James}
+      - NEXT_PUBLIC_WEDDING_DATE=${WEDDING_DATE:-June 14, 2025}
+      - STORAGE_BASE_PATH=/app/storage/uploads/photos
+    volumes:
+      # IMPORTANT: Mount storage volume for photo persistence
+      - photos_storage:/app/storage/uploads/photos
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: mysql:8.0
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: wedding_photos
+      MYSQL_USER: wedding
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./database/setup.sql:/docker-entrypoint-initdb.d/setup.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  photos_storage:
+    driver: local
+  mysql_data:
+    driver: local
