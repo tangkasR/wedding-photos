@@ -214,86 +214,78 @@ export default function UploadZone({
 
   return (
     <div className="w-full">
-      {/* ── DROP ZONE ── */}
-      <div
-        onDrop={handleDrop}
-        onDragEnter={handleDragEnter}
-        onDragLeave={handleDragLeave}
-        onDragOver={(e) => e.preventDefault()}
-        onClick={() => fileInputRef.current?.click()}
-        className={[
-          "border-2 rounded-2xl py-10 px-6 text-center cursor-pointer transition-all duration-200",
-          isDragging
-            ? "border-rose bg-rose-light scale-[1.01]"
-            : "border-border-strong bg-cream-soft hover:border-rose hover:bg-rose-light",
-        ].join(" ")}
-      >
-        <input
-          ref={fileInputRef}
-          type="file"
-          multiple
-          accept="image/*,.heic,.heif"
-          className="hidden"
-          onChange={(e) => {
-            if (e.target.files) {
-              addFiles(Array.from(e.target.files));
-              e.target.value = "";
-            }
-          }}
-        />
+      {/* ── INPUT TERSEMBUNYI ── selalu ada agar bisa dipanggil kapanpun */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        multiple
+        accept="image/*,.heic,.heif"
+        className="hidden"
+        onChange={(e) => {
+          if (e.target.files) {
+            addFiles(Array.from(e.target.files));
+            e.target.value = "";
+          }
+        }}
+      />
+
+      {/* ── DROP ZONE — hanya tampil kalau belum ada file ── */}
+      {files.length === 0 && (
         <div
+          onDrop={handleDrop}
+          onDragEnter={handleDragEnter}
+          onDragLeave={handleDragLeave}
+          onDragOver={(e) => e.preventDefault()}
+          onClick={() => fileInputRef.current?.click()}
           className={[
-            "w-16 h-16 rounded-full bg-rose flex items-center justify-center mx-auto mb-4 transition-transform duration-200",
-            isDragging ? "scale-110" : "",
+            "border-2 rounded-2xl py-10 px-6 text-center cursor-pointer transition-all duration-200",
+            isDragging
+              ? "border-rose bg-rose-light scale-[1.01]"
+              : "border-border-strong bg-cream-soft hover:border-rose hover:bg-rose-light",
           ].join(" ")}
         >
-          <svg
-            width="28"
-            height="28"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="white"
-            strokeWidth={1.8}
+          <div
+            className={[
+              "w-16 h-16 rounded-full bg-rose flex items-center justify-center mx-auto mb-4 transition-transform duration-200",
+              isDragging ? "scale-110" : "",
+            ].join(" ")}
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
-            />
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
+            <svg
+              width="28"
+              height="28"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="white"
               strokeWidth={1.8}
-              d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"
-            />
-          </svg>
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
+              />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={1.8}
+                d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"
+              />
+            </svg>
+          </div>
+          <p className="font-display text-2xl font-semibold text-charcoal mb-1">
+            {isDragging ? "Lepaskan di sini" : "Tambah Fotomu"}
+          </p>
+          <p className="text-[14px] text-muted font-medium">
+            Ketuk untuk memilih foto · atau seret &amp; lepas
+          </p>
+          <p className="text-[12px] text-subtle mt-1">
+            JPG · PNG · HEIC · semua format didukung
+          </p>
         </div>
-        <p className="font-display text-2xl font-semibold text-charcoal mb-1">
-          {isDragging ? "Lepaskan di sini" : "Tambah Fotomu"}
-        </p>
-        <p className="text-[14px] text-muted font-medium">
-          Ketuk untuk memilih foto · atau seret &amp; lepas
-        </p>
-        <p className="text-[12px] text-subtle mt-1">
-          JPG · PNG · HEIC · semua format didukung
-        </p>
-      </div>
+      )}
 
-      {/* ── NOTE ── */}
-      <div className="mt-3 flex items-start gap-2 p-3 bg-gold-light border border-[#c8a870] rounded-xl">
-        <span className="text-[16px] mt-[1px]">⚠️</span>
-        <p className="text-[12px] text-body font-medium leading-relaxed">
-          Foto yang sudah diunggah{" "}
-          <strong className="text-charcoal">
-            tidak dapat diubah atau dihapus
-          </strong>
-          . Pastikan foto yang kamu pilih sudah tepat sebelum mengunggah.
-        </p>
-      </div>
-
-      {/* ── PREVIEW GRID ── */}
+      {/* ── PREVIEW GRID — tampil setelah ada file ── */}
       {files.length > 0 && (
-        <div className="mt-5">
+        <div className="mt-1">
           <p className="text-[13px] font-semibold text-charcoal mb-2">
             Pratinjau —{" "}
             <span className="text-rose">{files.length} foto dipilih</span>
@@ -403,7 +395,7 @@ export default function UploadZone({
               </div>
             ))}
 
-            {/* Add more */}
+            {/* Tombol tambah foto lagi — hanya tampil saat tidak sedang upload */}
             {!isUploading && (
               <div
                 onClick={() => fileInputRef.current?.click()}
@@ -433,7 +425,7 @@ export default function UploadZone({
         </div>
       )}
 
-      {/* ── OPTIONAL FIELDS ── */}
+      {/* ── OPTIONAL FIELDS — muncul setelah ada file ── */}
       {files.length > 0 && (
         <div className="mt-4 flex flex-col gap-2">
           <div>
@@ -482,6 +474,18 @@ export default function UploadZone({
             : `📤 Unggah ${pendingCount} Foto`}
         </button>
       )}
+
+      {/* ── NOTE ── */}
+      <div className="mt-3 flex items-start gap-2 p-3 bg-gold-light border border-[#c8a870] rounded-xl">
+        <span className="text-[16px] mt-[1px]">⚠️</span>
+        <p className="text-[12px] text-body font-medium leading-relaxed">
+          Foto yang sudah diunggah{" "}
+          <strong className="text-charcoal">
+            tidak dapat diubah atau dihapus
+          </strong>
+          . Pastikan foto yang kamu pilih sudah tepat sebelum mengunggah.
+        </p>
+      </div>
 
       {/* ── PREVIEW LIGHTBOX ── */}
       {previewPhoto && (
