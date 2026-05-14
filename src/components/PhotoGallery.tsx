@@ -62,7 +62,7 @@ function Lightbox({
   }) => (
     <button
       onClick={onClick}
-      className="w-10 h-10 rounded-full border-none cursor-pointer text-white flex items-center justify-center transition-colors duration-200"
+      className="w-6 h-6 rounded-full border-none cursor-pointer text-white flex items-center justify-center transition-colors duration-200"
       style={{ background: "rgba(255,255,255,0.08)" }}
       onMouseEnter={(e) =>
         (e.currentTarget.style.background = "rgba(255,255,255,0.16)")
@@ -102,8 +102,8 @@ function Lightbox({
           }}
         >
           <svg
-            width="16"
-            height="16"
+            width="18"
+            height="18"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -136,8 +136,8 @@ function Lightbox({
             }}
           >
             <svg
-              width="16"
-              height="16"
+              width="18"
+              height="18"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -171,8 +171,8 @@ function Lightbox({
             }}
           >
             <svg
-              width="16"
-              height="16"
+              width="18"
+              height="18"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -200,38 +200,12 @@ function Lightbox({
           padding: "56px 0 20px",
           boxSizing: "border-box",
           overflow: "hidden",
+          gap: "0.75rem",
         }}
       >
-        {/* Foto — wrapper flex-1 + minHeight:0 agar tidak overflow */}
+        {/* Header bar — info + tombol unduh DI ATAS foto */}
         <div
           style={{
-            flex: 1,
-            minHeight: 0,
-            width: "100%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <img
-            src={photo.thumbnailUrl}
-            alt={photo.originalName}
-            style={{
-              display: "block",
-              maxWidth: "100%",
-              maxHeight: "100%",
-              width: "auto",
-              height: "auto",
-              objectFit: "contain",
-              borderRadius: "6px",
-            }}
-          />
-        </div>
-
-        {/* Caption */}
-        <div
-          style={{
-            marginTop: "0.75rem",
             width: "100%",
             flexShrink: 0,
             display: "flex",
@@ -249,6 +223,7 @@ function Lightbox({
                   fontSize: "1.05rem",
                   lineHeight: 1.3,
                   margin: 0,
+                  fontWeight: 500,
                 }}
               >
                 {photo.uploaderName}
@@ -257,7 +232,7 @@ function Lightbox({
             {photo.uploaderMessage && (
               <p
                 style={{
-                  color: "rgba(255,255,255,0.48)",
+                  color: "rgba(255,255,255,0.55)",
                   fontSize: "12px",
                   fontStyle: "italic",
                   marginTop: "2px",
@@ -268,9 +243,9 @@ function Lightbox({
             )}
             <p
               style={{
-                color: "rgba(255,255,255,0.28)",
+                color: "rgba(255,255,255,0.35)",
                 fontSize: "11px",
-                marginTop: "4px",
+                marginTop: "3px",
               }}
             >
               {fmtDate(photo.uploadedAt)} · {fmt(photo.fileSize)}
@@ -296,8 +271,34 @@ function Lightbox({
                 d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
               />
             </svg>
-            Unduh Asli
+            Unduh Foto
           </a>
+        </div>
+
+        {/* Foto — wrapper flex-1 + minHeight:0 agar tidak overflow */}
+        <div
+          style={{
+            flex: 1,
+            minHeight: 0,
+            width: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <img
+            src={photo.thumbnailUrl}
+            alt={photo.originalName}
+            style={{
+              display: "block",
+              maxWidth: "100%",
+              maxHeight: "100%",
+              width: "auto",
+              height: "auto",
+              objectFit: "contain",
+              borderRadius: "6px",
+            }}
+          />
         </div>
       </div>
     </div>
