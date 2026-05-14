@@ -1,71 +1,125 @@
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@400;500;600&display=swap");
 @import "tailwindcss";
 
 @theme {
-  --color-cream: #faf8f4;
-  --color-blush: #f0e0d6;
-  --color-rose: #c4876a;
-  --color-rose-dark: #a06a50;
-  --color-sage: #8fa89a;
-  --color-sage-light: #d4e0d8;
-  --color-charcoal: #2c2825;
-  --color-muted: #8a847d;
-  --color-gold: #c9a96e;
-  --color-gold-light: #e8d5b0;
-  --color-border: #ede8e0;
+  /* Background — putih bersih, tidak kekuningan */
+  --color-cream: #ffffff;
+  --color-cream-soft: #faf7f5;
+  --color-cream-mid: #f5f0ec;
 
-  --font-display: 'Cormorant Garamond', serif;
-  --font-body: 'Jost', sans-serif;
+  /* Accent utama — rose lebih gelap, lebih kontras */
+  --color-rose: #9e5a3a;
+  --color-rose-dark: #7a4028;
+  --color-rose-light: #f2e8e3;
 
-  --animate-fade-up-1: fadeUp 0.55s ease both;
-  --animate-fade-up-2: fadeUp 0.55s 0.1s ease both;
-  --animate-fade-up-3: fadeUp 0.55s 0.18s ease both;
-  --animate-fade-up-4: fadeUp 0.55s 0.26s ease both;
-  --animate-fade-up-5: fadeUp 0.55s 0.34s ease both;
+  /* Teks — sangat gelap agar mudah dibaca */
+  --color-charcoal: #1a1614;
+  --color-body: #2d2420;
+  --color-muted: #5c4f49;
+  --color-subtle: #8a7b75;
+
+  /* Aksen */
+  --color-sage: #5a7a6a;
+  --color-sage-light: #e8f0ec;
+  --color-gold: #9a7840;
+  --color-gold-light: #f0e6d0;
+
+  /* Border — lebih terlihat */
+  --color-border: #d8cec8;
+  --color-border-strong: #b8a89e;
+
+  /* Blush */
+  --color-blush: #f2e8e3;
+
+  --font-display: "Cormorant Garamond", Georgia, serif;
+  --font-body: "Inter", system-ui, sans-serif;
+
+  --animate-fade-up-1: fadeUp 0.5s ease both;
+  --animate-fade-up-2: fadeUp 0.5s 0.08s ease both;
+  --animate-fade-up-3: fadeUp 0.5s 0.16s ease both;
+  --animate-fade-up-4: fadeUp 0.5s 0.24s ease both;
+  --animate-fade-up-5: fadeUp 0.5s 0.32s ease both;
   --animate-shimmer: shimmer 1.4s infinite;
   --animate-bounce-dot: bounceDot 1.2s infinite;
 }
 
 @keyframes fadeUp {
-  from { opacity: 0; transform: translateY(18px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
-
 @keyframes shimmer {
-  0%   { background-position: -200% 0; }
-  100% { background-position:  200% 0; }
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
 }
-
 @keyframes bounceDot {
-  0%, 80%, 100% { transform: translateY(0); }
-  40%           { transform: translateY(-6px); }
+  0%,
+  80%,
+  100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-6px);
+  }
 }
 
-/* Base */
-/* * { box-sizing: border-box; margin: 0; padding: 0; } */
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+}
 
 body {
   font-family: var(--font-body);
   background-color: var(--color-cream);
-  color: var(--color-charcoal);
-  font-weight: 300;
+  color: var(--color-body);
+  font-weight: 400;
   -webkit-font-smoothing: antialiased;
+  font-size: 15px;
+  line-height: 1.6;
 }
 
 /* Scrollbar */
-::-webkit-scrollbar { width: 5px; }
-::-webkit-scrollbar-track { background: var(--color-cream); }
-::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 3px; }
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-cream-soft);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 3px;
+}
 
-/* Shimmer utility — needs gradient, can't be pure Tailwind */
+/* Shimmer */
 .shimmer {
-  background: linear-gradient(90deg, #e8d5b0 25%, #c9a96e 50%, #e8d5b0 75%);
+  background: linear-gradient(90deg, #e8d8c8 25%, #c8a870 50%, #e8d8c8 75%);
   background-size: 200% 100%;
   animation: var(--animate-shimmer);
 }
 
-/* Gallery hover — child selector, stays in CSS */
-.g-item { transition: transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94); cursor: pointer; }
-.g-item:hover { transform: scale(1.025); }
-.g-item:hover .g-overlay { opacity: 1 !important; }
-.g-item img { transition: transform 0.4s ease; display: block; width: 100%; height: 100%; object-fit: cover; }
+/* Gallery hover */
+.g-item {
+  transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  cursor: pointer;
+}
+.g-item:hover {
+  transform: scale(1.02);
+}
+.g-item:hover .g-overlay {
+  opacity: 1 !important;
+}
+.g-item img {
+  transition: transform 0.4s ease;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

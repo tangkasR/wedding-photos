@@ -21,7 +21,7 @@ const SocialLink = ({
     href={href}
     target="_blank"
     rel="noopener noreferrer"
-    className="flex items-center gap-1 text-[11px] text-muted no-underline transition-colors duration-200 hover:text-rose"
+    className="flex items-center gap-1.5 text-[12px] text-muted no-underline transition-colors duration-200 hover:text-rose"
   >
     {children}
   </a>
@@ -34,25 +34,25 @@ export default function HomePage() {
   return (
     <main className="min-h-screen bg-cream">
       {/* ── NAV ── */}
-      <nav className="sticky top-0 z-40 flex items-center justify-between px-6 h-[50px] bg-cream/90 backdrop-blur-md border-b border-border">
+      <nav className="py-8 sticky top-0 z-40 flex items-center justify-between px-5 h-[56px] bg-cream border-b border-border">
         <span className="font-display text-base tracking-wide text-charcoal">
           <Image src="/imglogo.png" width={"30"} height={"30"} alt="logo" />
         </span>
-        <div className="flex gap-[3px] bg-border rounded-full p-[3px]">
+        <div className="flex gap-1 bg-cream-mid rounded-full p-1 border border-border">
           {(["upload", "gallery"] as const).map((v) => (
             <button
               key={v}
               onClick={() => setView(v)}
               className={[
-                "px-4 py-1 rounded-full text-[11px] font-medium tracking-widest uppercase border-none cursor-pointer transition-all duration-200",
+                "px-5 py-1.5 rounded-full text-[13px] font-semibold tracking-wide border-none cursor-pointer transition-all duration-200",
                 v === "upload" && view === "upload"
                   ? "bg-rose text-white shadow-sm"
                   : v === "gallery" && view === "gallery"
-                  ? "bg-white text-charcoal shadow-sm"
-                  : "bg-transparent text-muted",
+                  ? "bg-rose text-white shadow-sm"
+                  : "bg-transparent text-muted hover:text-charcoal",
               ].join(" ")}
             >
-              {v === "upload" ? "Bagikan" : "Galeri"}
+              {v === "upload" ? "📷 Bagikan" : "🖼 Galeri"}
             </button>
           ))}
         </div>
@@ -60,27 +60,29 @@ export default function HomePage() {
 
       {/* ── UPLOAD VIEW ── */}
       {view === "upload" && (
-        <div className="max-w-[440px] mx-auto px-6 pt-8 pb-16 animate-[var(--animate-fade-up-1)]">
+        <div className="max-w-[480px] mx-auto px-5 pt-8 pb-16 animate-[var(--animate-fade-up-1)]">
           {/* Hero */}
           <div className="text-center mb-8">
-            <p className="text-[10px] tracking-[0.35em] uppercase text-muted mb-2">
+            <p className="text-[11px] tracking-[0.3em] uppercase text-muted font-semibold mb-3">
               Hari Pernikahan
             </p>
-            <h1 className="font-display text-[clamp(2.2rem,7vw,3.2rem)] font-light leading-[1.08] text-charcoal mb-1">
+            <h1 className="font-display text-[clamp(2.4rem,8vw,3.6rem)] font-semibold leading-[1.05] text-charcoal mb-2">
               {COUPLE_NAMES}
             </h1>
             {WEDDING_DATE && (
-              <p className="font-display text-base italic text-rose mb-3 animate-[var(--animate-fade-up-2)]">
+              <p className="font-display text-[1.15rem] italic text-rose font-medium mb-4">
                 {WEDDING_DATE}
               </p>
             )}
-            <div className="flex items-center gap-[10px] mx-auto w-fit mb-3 animate-[var(--animate-fade-up-3)]">
-              <div className="h-px w-8 bg-gold opacity-50" />
-              <span className="text-gold text-xs">✦</span>
-              <div className="h-px w-8 bg-gold opacity-50" />
+            <div className="flex items-center gap-3 mx-auto w-fit mb-4">
+              <div className="h-px w-10 bg-gold opacity-60" />
+              <span className="text-gold text-sm font-bold">✦</span>
+              <div className="h-px w-10 bg-gold opacity-60" />
             </div>
-            <p className="text-[12px] leading-[1.75] text-muted animate-[var(--animate-fade-up-3)]">
+            <p className="text-[14px] leading-relaxed text-muted">
               Bagikan fotomu dari hari istimewa kami.
+              <br />
+              Setiap gambar tersimpan persis seperti aslinya.
             </p>
           </div>
 
@@ -97,9 +99,9 @@ export default function HomePage() {
           <div className="text-center mt-8 animate-[var(--animate-fade-up-5)]">
             <button
               onClick={() => setView("gallery")}
-              className="bg-transparent border-none cursor-pointer text-[11px] text-muted tracking-[0.12em] uppercase underline decoration-border hover:text-charcoal transition-colors duration-200"
+              className="bg-transparent border border-border-strong rounded-full px-6 py-2.5 cursor-pointer text-[13px] font-semibold text-muted hover:text-charcoal hover:border-charcoal transition-all duration-200"
             >
-              Lihat Galeri →
+              Lihat Galeri Foto →
             </button>
           </div>
         </div>
@@ -107,7 +109,7 @@ export default function HomePage() {
 
       {/* ── GALLERY VIEW ── */}
       {view === "gallery" && (
-        <div className="px-4 pt-8 pb-16 animate-[var(--animate-fade-up-1)]">
+        <div className="px-4 pt-6 pb-16 animate-[var(--animate-fade-up-1)]">
           <PhotoGallery
             newPhotos={newPhotos}
             onBackToShare={() => setView("upload")}
@@ -116,43 +118,42 @@ export default function HomePage() {
       )}
 
       {/* ── FOOTER ── */}
-      <footer className="border-t border-border py-10 px-6 text-center">
-        <p className="font-display text-xl text-charcoal mb-1">
+      <footer className="border-t-2 border-border bg-cream-soft py-10 px-6 text-center">
+        <p className="font-display text-2xl font-semibold text-charcoal mb-1">
           {COUPLE_NAMES}
         </p>
         {WEDDING_DATE && (
-          <p className="font-display text-sm italic text-rose mb-4">
+          <p className="font-display text-base italic text-rose font-medium mb-4">
             {WEDDING_DATE}
           </p>
         )}
 
         {/* Romantic tagline */}
-        <p className="font-display text-base italic text-muted leading-relaxed max-w-xs mx-auto mb-6">
-          "Setiap foto adalah doa yang terpanjatkan,
-          <br />
-          setiap senyum adalah cerita yang abadi."
+        <p className="font-display text-lg italic text-muted leading-relaxed max-w-sm mx-auto mb-6">
+          "Setiap foto adalah doa yang terpanjatkan, setiap senyum adalah cerita
+          yang abadi."
         </p>
 
-        <div className="h-px bg-border max-w-[160px] mx-auto mb-6" />
+        <div className="h-[2px] bg-border max-w-[120px] mx-auto mb-6 rounded-full" />
 
         {/* tr.codes credit */}
-        <div className="text-[11px] text-muted leading-loose">
-          <p className="mb-1 opacity-70">
+        <div className="text-[12px] text-muted">
+          <p className="mb-2 font-medium">
             Website ini dibuat dengan ❤️ oleh{" "}
             <Link
               href="https://trcodes.id"
               target="_blank"
               rel="noopener noreferrer"
-              className="ml-1 font-medium text-rose no-underline text-[13px] tracking-wide"
+              className="font-bold text-rose no-underline hover:underline text-[13px]"
             >
               tr.codes
             </Link>
           </p>
-          <div className="grid grid-cols-2 md:flex flex-wrap justify-center gap-3 mt-2 opacity-75">
+          <div className="flex flex-wrap justify-center gap-4 mt-2">
             <SocialLink href="https://instagram.com/tr.codes">
               <svg
-                width="13"
-                height="13"
+                width="14"
+                height="14"
                 viewBox="0 0 24 24"
                 fill="currentColor"
               >
@@ -162,8 +163,8 @@ export default function HomePage() {
             </SocialLink>
             <SocialLink href="mailto:tr.codes.dev@gmail.com">
               <svg
-                width="13"
-                height="13"
+                width="14"
+                height="14"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -171,7 +172,7 @@ export default function HomePage() {
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  strokeWidth={1.8}
+                  strokeWidth={2}
                   d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
                 />
               </svg>
@@ -179,8 +180,8 @@ export default function HomePage() {
             </SocialLink>
             <SocialLink href="https://wa.me/6282135397406">
               <svg
-                width="13"
-                height="13"
+                width="14"
+                height="14"
                 viewBox="0 0 24 24"
                 fill="currentColor"
               >
@@ -190,8 +191,8 @@ export default function HomePage() {
             </SocialLink>
             <SocialLink href="https://trcodes.id">
               <svg
-                width="13"
-                height="13"
+                width="14"
+                height="14"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -199,7 +200,7 @@ export default function HomePage() {
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  strokeWidth={1.8}
+                  strokeWidth={2}
                   d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"
                 />
               </svg>
