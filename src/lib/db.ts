@@ -1,21 +1,15 @@
 import mysql from "mysql2/promise";
 
-// Lazy pool — dibuat saat pertama kali digunakan, bukan saat module load
-// Ini penting agar env sudah terbaca oleh Next.js sebelum koneksi dibuat
 let _pool: mysql.Pool | undefined;
 
 function getPool(): mysql.Pool {
   if (_pool) return _pool;
 
-  const url = process.env.DATABASE_URL;
-  if (!url) throw new Error("DATABASE_URL tidak ditemukan di .env");
-
-  const parsed = new URL(url);
-  const user = decodeURIComponent(parsed.username) || "root";
-  const password = decodeURIComponent(parsed.password) || "";
-  const host = parsed.hostname;
-  const port = parsed.port ? parseInt(parsed.port, 10) : 3306;
-  const database = parsed.pathname.replace(/^\//, "");
+  const host = process.env.DB_HOST || "localhost";
+  const port = parseInt(process.env.DB_PORT || "3306", 10);
+  const user = process.env.DB_USER || "root";
+  const password = process.env.DB_PASSWORD || "";
+  const database = process.env.DB_NAME || "wedding_photos";
 
   console.log(`[db] Connecting: ${user}@${host}:${port}/${database}`);
 
@@ -157,7 +151,6 @@ export async function getGallery(
   const limit = Math.max(1, Math.floor(Number(pageSize)));
   const offset = Math.max(0, Math.floor((Number(page) - 1) * limit));
 
-  // Inline integer langsung — hindari ER_WRONG_ARGUMENTS pada LIMIT/OFFSET
   const [rows] = await getPool().query<mysql.RowDataPacket[]>(
     `SELECT id, originalName, storedName, mimeType, fileSize, width, height,
             uploadedAt, downloadCount, uploaderName, uploaderMessage
