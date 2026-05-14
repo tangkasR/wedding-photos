@@ -62,7 +62,7 @@ function Lightbox({
   }) => (
     <button
       onClick={onClick}
-      className="w-6 h-6 rounded-full border-none cursor-pointer text-white flex items-center justify-center transition-colors duration-200"
+      className="w-10 h-10 rounded-full border-none cursor-pointer text-white flex items-center justify-center transition-colors duration-200"
       style={{ background: "rgba(255,255,255,0.08)" }}
       onMouseEnter={(e) =>
         (e.currentTarget.style.background = "rgba(255,255,255,0.16)")
@@ -102,8 +102,8 @@ function Lightbox({
           }}
         >
           <svg
-            width="18"
-            height="18"
+            width="16"
+            height="16"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -136,8 +136,8 @@ function Lightbox({
             }}
           >
             <svg
-              width="18"
-              height="18"
+              width="16"
+              height="16"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -171,8 +171,8 @@ function Lightbox({
             }}
           >
             <svg
-              width="18"
-              height="18"
+              width="16"
+              height="16"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -196,14 +196,41 @@ function Lightbox({
           flexDirection: "column",
           alignItems: "center",
           width: "min(88vw, 960px)",
-          height: "100vh",
-          padding: "56px 0 20px",
+          height: "90vh",
+          maxHeight: "90vh",
+          padding: "16px 0 16px",
           boxSizing: "border-box",
           overflow: "hidden",
           gap: "0.75rem",
         }}
       >
         {/* Header bar — info + tombol unduh DI ATAS foto */}
+
+        {/* Foto — wrapper flex-1 + minHeight:0 agar tidak overflow */}
+        <div
+          style={{
+            flex: 1,
+            minHeight: 0,
+            width: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <img
+            src={photo.thumbnailUrl}
+            alt={photo.originalName}
+            style={{
+              display: "block",
+              maxWidth: "100%",
+              maxHeight: "100%",
+              width: "auto",
+              height: "auto",
+              objectFit: "contain",
+              borderRadius: "6px",
+            }}
+          />
+        </div>
         <div
           style={{
             width: "100%",
@@ -271,34 +298,8 @@ function Lightbox({
                 d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
               />
             </svg>
-            Unduh Foto
+            Unduh Asli
           </a>
-        </div>
-
-        {/* Foto — wrapper flex-1 + minHeight:0 agar tidak overflow */}
-        <div
-          style={{
-            flex: 1,
-            minHeight: 0,
-            width: "100%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <img
-            src={photo.thumbnailUrl}
-            alt={photo.originalName}
-            style={{
-              display: "block",
-              maxWidth: "100%",
-              maxHeight: "100%",
-              width: "auto",
-              height: "auto",
-              objectFit: "contain",
-              borderRadius: "6px",
-            }}
-          />
         </div>
       </div>
     </div>
