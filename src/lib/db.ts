@@ -1,33 +1,40 @@
 import mysql from "mysql2/promise";
 
-// Connection pool singleton
-const globalForDb = globalThis as unknown as {
-  dbPool: mysql.Pool | undefined;
-};
+// Lazy pool — dibuat saat pertama kali digunakan, bukan saat module load
+// Ini penting agar env sudah terbaca oleh Next.js sebelum koneksi dibuat
+let _pool: mysql.Pool | undefined;
 
-function createPool(): mysql.Pool {
+function getPool(): mysql.Pool {
+  if (_pool) return _pool;
+
   const url = process.env.DATABASE_URL;
-  if (!url) throw new Error("DATABASE_URL environment variable is not set");
+  if (!url) throw new Error("DATABASE_URL tidak ditemukan di .env");
 
-  // Parse mysql://user:pass@host:port/dbname
   const parsed = new URL(url);
+  const user = decodeURIComponent(parsed.username) || "root";
+  const password = decodeURIComponent(parsed.password) || "";
+  const host = parsed.hostname;
+  const port = parsed.port ? parseInt(parsed.port, 10) : 3306;
+  const database = parsed.pathname.replace(/^\//, "");
 
-  return mysql.createPool({
-    host: parsed.hostname,
-    port: parsed.port ? parseInt(parsed.port) : 3306,
-    user: parsed.username || "root",
-    password: parsed.password || "",
-    database: parsed.pathname.replace("/", ""),
+  console.log(`[db] Connecting: ${user}@${host}:${port}/${database}`);
+
+  _pool = mysql.createPool({
+    host,
+    port,
+    user,
+    password,
+    database,
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0,
     charset: "utf8mb4",
+    supportBigNumbers: true,
+    bigNumberStrings: false,
   });
+
+  return _pool;
 }
-
-export const db = globalForDb.dbPool ?? createPool();
-
-if (process.env.NODE_ENV !== "production") globalForDb.dbPool = db;
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -64,8 +71,8 @@ export async function createPhoto(data: {
   uploaderMessage: string | null;
   deviceInfo: string | null;
 }): Promise<void> {
-  await db.execute(
-    `INSERT INTO photos 
+  await getPool().execute(
+    `INSERT INTO photos
       (id, originalName, storedName, filePath, mimeType, fileSize, checksum,
        uploaderName, uploaderMessage, deviceInfo, status)
      VALUES (?, ?, ?, ?, ?, 0, '', ?, ?, ?, 'UPLOADING')`,
@@ -92,7 +99,7 @@ export async function completePhoto(
     exifData: Record<string, unknown> | null;
   }
 ): Promise<void> {
-  await db.execute(
+  await getPool().execute(
     `UPDATE photos
      SET fileSize=?, checksum=?, width=?, height=?, exifData=?, status='COMPLETE'
      WHERE id=?`,
@@ -108,15 +115,17 @@ export async function completePhoto(
 }
 
 export async function failPhoto(id: string): Promise<void> {
-  await db.execute(`UPDATE photos SET status='FAILED' WHERE id=?`, [id]);
+  await getPool().execute(`UPDATE photos SET status='FAILED' WHERE id=?`, [id]);
 }
 
 export async function deletePhoto(id: string): Promise<void> {
-  await db.execute(`DELETE FROM photos WHERE id=?`, [id]);
+  await getPool().execute(`DELETE FROM photos WHERE id=?`, [id]);
 }
 
-export async function findPhotoByStoredName(storedName: string): Promise<Photo | null> {
-  const [rows] = await db.execute<mysql.RowDataPacket[]>(
+export async function findPhotoByStoredName(
+  storedName: string
+): Promise<Photo | null> {
+  const [rows] = await getPool().execute<mysql.RowDataPacket[]>(
     `SELECT * FROM photos WHERE storedName=? LIMIT 1`,
     [storedName]
   );
@@ -124,24 +133,32 @@ export async function findPhotoByStoredName(storedName: string): Promise<Photo |
   return rowToPhoto(rows[0]);
 }
 
-export async function updateFilePath(id: string, filePath: string): Promise<void> {
-  await db.execute(`UPDATE photos SET filePath=? WHERE id=?`, [filePath, id]);
+export async function updateFilePath(
+  id: string,
+  filePath: string
+): Promise<void> {
+  await getPool().execute(`UPDATE photos SET filePath=? WHERE id=?`, [
+    filePath,
+    id,
+  ]);
 }
 
 export async function incrementDownloadCount(id: string): Promise<void> {
-  await db.execute(`UPDATE photos SET downloadCount=downloadCount+1 WHERE id=?`, [id]);
+  await getPool().execute(
+    `UPDATE photos SET downloadCount=downloadCount+1 WHERE id=?`,
+    [id]
+  );
 }
 
 export async function getGallery(
   page: number,
   pageSize: number
 ): Promise<{ photos: Photo[]; total: number }> {
-  // Inline integers directly into query — mysql2 sends ? params as strings
-  // which causes ER_WRONG_ARGUMENTS with LIMIT/OFFSET on some MySQL versions
   const limit = Math.max(1, Math.floor(Number(pageSize)));
   const offset = Math.max(0, Math.floor((Number(page) - 1) * limit));
 
-  const [rows] = await db.query<mysql.RowDataPacket[]>(
+  // Inline integer langsung — hindari ER_WRONG_ARGUMENTS pada LIMIT/OFFSET
+  const [rows] = await getPool().query<mysql.RowDataPacket[]>(
     `SELECT id, originalName, storedName, mimeType, fileSize, width, height,
             uploadedAt, downloadCount, uploaderName, uploaderMessage
      FROM photos
@@ -150,7 +167,7 @@ export async function getGallery(
      LIMIT ${limit} OFFSET ${offset}`
   );
 
-  const [[countRow]] = await db.query<mysql.RowDataPacket[]>(
+  const [[countRow]] = await getPool().query<mysql.RowDataPacket[]>(
     `SELECT COUNT(*) as total FROM photos WHERE status='COMPLETE'`
   );
 
