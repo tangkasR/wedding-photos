@@ -200,7 +200,6 @@ function Lightbox({
           maxHeight: "90dvh",
           boxSizing: "border-box",
           overflow: "hidden",
-          paddingTop: "48px",
           paddingBottom: "0px",
           gap: "10px",
         }}
