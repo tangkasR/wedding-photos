@@ -86,6 +86,7 @@ function Lightbox({
         width: "100vw",
         height: "100vh",
         display: "flex",
+        alignItems: "center",
         justifyContent: "center",
         animation: "fadeUp 0.2s ease both",
       }}
@@ -192,8 +193,8 @@ function Lightbox({
         onClick={(e) => e.stopPropagation()}
         style={{
           width: "min(88vw, 960px)",
-          height: "90vh",
-          maxHeight: "90vh",
+          height: "80vh",
+          maxHeight: "80vh",
           boxSizing: "border-box",
           overflow: "hidden",
           paddingBottom: "0px",
