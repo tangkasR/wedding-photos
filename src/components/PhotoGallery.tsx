@@ -86,7 +86,6 @@ function Lightbox({
         width: "100vw",
         height: "100vh",
         display: "flex",
-        alignItems: "start",
         justifyContent: "center",
         animation: "fadeUp 0.2s ease both",
       }}
@@ -192,9 +191,6 @@ function Lightbox({
       <div
         onClick={(e) => e.stopPropagation()}
         style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
           width: "min(88vw, 960px)",
           height: "90vh",
           maxHeight: "90vh",
