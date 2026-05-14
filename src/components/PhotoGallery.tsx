@@ -86,7 +86,7 @@ function Lightbox({
         width: "100vw",
         height: "100vh",
         display: "flex",
-        alignItems: "center",
+        alignItems: "start",
         justifyContent: "center",
         animation: "fadeUp 0.2s ease both",
       }}
@@ -201,6 +201,7 @@ function Lightbox({
           boxSizing: "border-box",
           overflow: "hidden",
           paddingBottom: "0px",
+          paddingTop: "16px",
           gap: "10px",
         }}
       >
