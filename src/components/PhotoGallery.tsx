@@ -198,37 +198,9 @@ function Lightbox({
           boxSizing: "border-box",
           overflow: "hidden",
           paddingBottom: "0px",
-          paddingTop: "16px",
           gap: "10px",
         }}
       >
-        {/* Foto — mengisi sisa ruang */}
-        <div
-          style={{
-            flex: 1,
-            minHeight: 0,
-            width: "100%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <img
-            src={photo.thumbnailUrl}
-            alt={photo.originalName}
-            style={{
-              display: "block",
-              maxWidth: "100%",
-              maxHeight: "100%",
-              width: "auto",
-              height: "auto",
-              objectFit: "contain",
-              borderRadius: "6px",
-            }}
-          />
-        </div>
-
-        {/* Footer bar — nama, pesan, tanggal + tombol unduh */}
         <div
           style={{
             width: "100%",
@@ -237,7 +209,7 @@ function Lightbox({
             alignItems: "center",
             justifyContent: "space-between",
             gap: "12px",
-            padding: "10px 0 16px",
+            paddingBottom: "16px",
           }}
         >
           {/* Info kiri */}
@@ -318,6 +290,30 @@ function Lightbox({
             </svg>
             Unduh Foto
           </a>
+        </div>
+        {/* Foto — mengisi sisa ruang */}
+        <div
+          style={{
+            flex: 1,
+            minHeight: 0,
+            width: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <img
+            src={photo.thumbnailUrl}
+            alt={photo.originalName}
+            style={{
+              display: "block",
+              maxWidth: "100%",
+              maxHeight: "100%",
+              width: "auto",
+              height: "auto",
+              objectFit: "contain",
+            }}
+          />
         </div>
       </div>
     </div>
