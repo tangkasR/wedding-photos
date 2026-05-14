@@ -188,7 +188,7 @@ function Lightbox({
         </div>
       )}
 
-      {/* Foto + Caption */}
+      {/* Konten: close di atas, foto di tengah, info+unduh di bawah */}
       <div
         onClick={(e) => e.stopPropagation()}
         style={{
@@ -196,17 +196,16 @@ function Lightbox({
           flexDirection: "column",
           alignItems: "center",
           width: "min(88vw, 960px)",
-          height: "90vh",
-          maxHeight: "90vh",
-          padding: "16px 0 16px",
+          height: "90dvh",
+          maxHeight: "90dvh",
           boxSizing: "border-box",
           overflow: "hidden",
-          gap: "0.75rem",
+          paddingTop: "48px",
+          paddingBottom: "0px",
+          gap: "10px",
         }}
       >
-        {/* Header bar — info + tombol unduh DI ATAS foto */}
-
-        {/* Foto — wrapper flex-1 + minHeight:0 agar tidak overflow */}
+        {/* Foto — mengisi sisa ruang */}
         <div
           style={{
             flex: 1,
@@ -231,6 +230,8 @@ function Lightbox({
             }}
           />
         </div>
+
+        {/* Footer bar — nama, pesan, tanggal + tombol unduh */}
         <div
           style={{
             width: "100%",
@@ -238,16 +239,18 @@ function Lightbox({
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            gap: "1rem",
+            gap: "12px",
+            padding: "10px 0 16px",
           }}
         >
-          <div style={{ minWidth: 0 }}>
+          {/* Info kiri */}
+          <div style={{ minWidth: 0, flex: 1 }}>
             {photo.uploaderName && (
               <p
                 className="font-display"
                 style={{
                   color: "white",
-                  fontSize: "1.05rem",
+                  fontSize: "1rem",
                   lineHeight: 1.3,
                   margin: 0,
                   fontWeight: 500,
@@ -263,6 +266,9 @@ function Lightbox({
                   fontSize: "12px",
                   fontStyle: "italic",
                   marginTop: "2px",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
                 }}
               >
                 "{photo.uploaderMessage}"
@@ -272,21 +278,36 @@ function Lightbox({
               style={{
                 color: "rgba(255,255,255,0.35)",
                 fontSize: "11px",
-                marginTop: "3px",
+                marginTop: "2px",
               }}
             >
               {fmtDate(photo.uploadedAt)} · {fmt(photo.fileSize)}
             </p>
           </div>
+
+          {/* Tombol unduh kanan */}
           <a
             href={`${photo.url}?download=1`}
             download={photo.originalName}
             onClick={(e) => e.stopPropagation()}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-rose text-white text-[13px] font-bold no-underline shrink-0 whitespace-nowrap hover:bg-rose-dark transition-colors duration-200"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "6px",
+              padding: "10px 18px",
+              borderRadius: "999px",
+              background: "var(--color-rose)",
+              color: "white",
+              fontSize: "13px",
+              fontWeight: 700,
+              textDecoration: "none",
+              flexShrink: 0,
+              whiteSpace: "nowrap",
+            }}
           >
             <svg
-              width="13"
-              height="13"
+              width="14"
+              height="14"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -294,7 +315,7 @@ function Lightbox({
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                strokeWidth={2}
+                strokeWidth={2.5}
                 d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
               />
             </svg>
